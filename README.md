@@ -8,7 +8,7 @@ Principles:
 - **Plugins are not universal.** Each agent has its own plugin mechanism, so the plugin section is always per-agent.
 - **Universal setup first.** Add exceptions only when the agent on your device does not read `~/.agents/skills/`.
 
-Prerequisites: `git`, `curl`, and an agent that supports `SKILL.md` skills.
+Prerequisites: `git`, `curl`, and an agent that supports `SKILL.md` skills. OpenCode must be 2.0.4 or later for the Superpowers plugin.
 
 ---
 
@@ -41,9 +41,9 @@ If your agent is in this table, skip section 2.
 | create-verification-skill | [cursor/plugins](https://github.com/cursor/plugins) (`pstack/skills/create-verification-skill`) | see block below |
 | code-simplification | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (`skills/code-simplification`) | see block below |
 | officecli (skill only) | [officecli.ai/SKILL.md](https://officecli.ai/SKILL.md) | see block below |
-| find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | `npx skills add vercel-labs/skills --skill find-skills -g -y` |
+| find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | see block below |
 | stop-slop | [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop) | `git clone --depth 1 https://github.com/hardikpandya/stop-slop.git ~/.agents/skills/stop-slop` |
-| tui-design | [hyperb1iss/hyperskills](https://github.com/hyperb1iss/hyperskills) | `npx skills add https://github.com/hyperb1iss/hyperskills --skill tui-design` |
+| tui-design | [hyperb1iss/hyperskills](https://github.com/hyperb1iss/hyperskills) | see block below |
 
 Skills that need extra steps:
 
@@ -69,6 +69,14 @@ cp -r /tmp/agent-skills/skills/code-simplification ~/.agents/skills/
 # officecli: skill file only, the binary is installed separately (see section 4)
 mkdir -p ~/.agents/skills/officecli
 curl -fsSL https://officecli.ai/SKILL.md -o ~/.agents/skills/officecli/SKILL.md
+
+# find-skills
+git clone --depth 1 https://github.com/vercel-labs/skills.git /tmp/vercel-skills
+cp -r /tmp/vercel-skills/skills/find-skills ~/.agents/skills/
+
+# tui-design
+git clone --depth 1 https://github.com/hyperb1iss/hyperskills.git /tmp/hyperskills
+cp -r /tmp/hyperskills/skills/tui-design ~/.agents/skills/
 ```
 
 Verify:
@@ -96,21 +104,29 @@ Some agents do not read `~/.agents/skills/`. Do not change the universal setup; 
 # Claude Code
 mkdir -p ~/.claude/skills
 for s in ~/.agents/skills/*/; do
-  ln -sfn "$s" ~/.claude/skills/"$(basename "$s")"
+  d=~/.claude/skills/"$(basename "$s")"
+  [ -d "$d" ] && [ ! -L "$d" ] && rm -rf "$d"
+  ln -sfn "$s" "$d"
 done
 
 # Antigravity app / IDE
 mkdir -p ~/.gemini/config/skills
 for s in ~/.agents/skills/*/; do
-  ln -sfn "$s" ~/.gemini/config/skills/"$(basename "$s")"
+  d=~/.gemini/config/skills/"$(basename "$s")"
+  [ -d "$d" ] && [ ! -L "$d" ] && rm -rf "$d"
+  ln -sfn "$s" "$d"
 done
 
 # Antigravity CLI
 mkdir -p ~/.gemini/antigravity-cli/skills
 for s in ~/.agents/skills/*/; do
-  ln -sfn "$s" ~/.gemini/antigravity-cli/skills/"$(basename "$s")"
+  d=~/.gemini/antigravity-cli/skills/"$(basename "$s")"
+  [ -d "$d" ] && [ ! -L "$d" ] && rm -rf "$d"
+  ln -sfn "$s" "$d"
 done
 ```
+
+The `rm -rf` line replaces a real folder left by the copy fallback below. It never removes a symlink; `ln -sfn` replaces those directly.
 
 Important: symlink **one skill folder at a time**, never the whole `skills/` directory. Claude Code and Codex write internal files into their skill folders, and symlinking the whole directory can break that.
 
@@ -173,19 +189,18 @@ If an agent has no plugin system, skip this section. The core Superpowers skills
 
 ### Termux (Android)
 
-Termux's bundled `npm` and `npx` may fail with `bad interpreter: /usr/bin/env`. Workaround:
+Termux's bundled `npm` and `npx` may fail with `bad interpreter: /usr/bin/env`. That is why every skill here installs with `git` or `curl`; no npm step is required.
 
-```sh
-node "$(readlink -f "$(command -v npx)")" -y skills add vercel-labs/skills --skill find-skills -g -y
-node "$(readlink -f "$(command -v npm)")" install -g <package>
-```
-
-OfficeCLI (the `.docx/.xlsx/.pptx` binary) needs glibc and **does not run** on plain Termux. The `officecli` skill still installs, but the `officecli` command is only useful on Linux/macOS, or in Termux through `glibc-runner` / `proot-distro`:
+OfficeCLI (the `.docx/.xlsx/.pptx` binary) needs glibc and **does not run** on plain Termux. The `officecli` skill still installs, but the `officecli` command is only useful on Linux/macOS, or in Termux through `glibc-runner` / `proot-distro`. The glibc route is worth a try but is not guaranteed to work with this .NET binary; if it fails, use a Debian container:
 
 ```sh
 dpkg --configure -a          # only if dpkg was interrupted before
 pkg install -y glibc-runner
 grun ~/.local/bin/officecli --version
+
+# fallback if the command above fails
+pkg install proot-distro
+proot-distro install debian
 ```
 
 ### Linux / macOS
@@ -207,11 +222,7 @@ git -C ~/.agents/skills/humanizer-id pull --ff-only
 git -C ~/.agents/skills/stop-slop pull --ff-only
 ```
 
-Skills installed through the CLI:
-
-```sh
-npx skills update
-```
+Skills copied from a temp clone have no git metadata; re-run their clone and `cp` steps from section 1 to update them.
 
 OpenCode plugins:
 
