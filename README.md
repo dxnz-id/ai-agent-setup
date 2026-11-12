@@ -44,6 +44,8 @@ If your agent is in this table, skip section 2.
 | find-skills | [vercel-labs/skills](https://github.com/vercel-labs/skills) | see block below |
 | stop-slop | [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop) | `git clone --depth 1 https://github.com/hardikpandya/stop-slop.git ~/.agents/skills/stop-slop` |
 | tui-design | [hyperb1iss/hyperskills](https://github.com/hyperb1iss/hyperskills) | see block below |
+| taste-skill | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | see block below |
+| motion-graphics | [awesomeclaude.ai](https://awesomeclaude.ai/claude-motion-graphics-skill.md) | see block below |
 
 Skills that need extra steps:
 
@@ -77,6 +79,15 @@ cp -r /tmp/vercel-skills/skills/find-skills ~/.agents/skills/
 # tui-design
 git clone --depth 1 https://github.com/hyperb1iss/hyperskills.git /tmp/hyperskills
 cp -r /tmp/hyperskills/skills/tui-design ~/.agents/skills/
+
+# taste-skill
+git clone --depth 1 https://github.com/Leonxlnx/taste-skill.git /tmp/taste-skill
+cp -r /tmp/taste-skill/skills/* ~/.agents/skills/
+
+# motion-graphics
+mkdir -p ~/.agents/skills/motion-graphics
+curl -fsSL https://awesomeclaude.ai/claude-motion-graphics-skill.md \
+  -o ~/.agents/skills/motion-graphics/SKILL.md
 ```
 
 Verify:
