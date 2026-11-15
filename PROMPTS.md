@@ -17,6 +17,7 @@ Rules:
 - Install skills only in ~/.agents/skills/. Never copy skill files into a project.
 - Install and symlink one skill folder at a time. Never symlink the whole skills directory.
 - Ask before installing plugins or editing agent config.
+- Only add plugins and symlinks for agents present on this machine. Detect them by command or config, and skip the rest without listing them.
 - Skip what is already installed and say so.
 - Do not use npm or npx on Termux.
 
@@ -33,13 +34,15 @@ Sync this machine's AI agent setup with https://github.com/dxnz-id/ai-agent-setu
 
 Do not change anything until the user picks an action.
 
+Detect installed agents first: opencode, claude, codex, agy, or the app's config. Only check and report agents that are installed. Do not mention an agent that is not installed.
+
 1. Read ~/.agents/skills/.sync-state. If it does not exist, say this is the first sync and treat the state as empty.
 2. Use the current checkout if you are inside the repo. Otherwise clone it to a temporary directory. Fetch the latest main.
 3. Read README.md. It is the source of truth for the skill and tool list, sources, and install commands.
 4. Build the status report before changing anything:
    - List: every skill in README.md, including nested skills such as humanizer-id/jurnal, whether it exists in ~/.agents/skills, and every folder in ~/.agents/skills that README.md does not list.
    - Upstream: for each skill and tool, compare the state entry with its upstream source. For git entries, fetch the upstream repo and compare the recorded commit with its HEAD. List the commits that touch the skill or tool path, not every commit in the repo. For npm entries, compare the recorded version with the latest published version. For file entries, download the source and compare sha256. Mark each item as up-to-date, outdated (with the number of commits or the version gap), or unknown.
-   - Drift: symlinks that do not point into ~/.agents/skills, and missing OpenCode plugin entries.
+   - Drift: symlinks for installed agents that do not point into ~/.agents/skills, and missing OpenCode plugin entries when OpenCode is installed.
    Start the report with the last sync time and repo commit, then group it as: missing, extra, outdated, up-to-date, drift.
 5. Ask:
    "Which sync do you want?
@@ -53,7 +56,7 @@ Do not change anything until the user picks an action.
    - Upstream: update installed skills and tools. Copied skill: remove the old folder after approval, then re-run its clone and copy step. Cloned skill: git -C ~/.agents/skills/<name> pull --ff-only. Curl skill: download the file again. Plugin or tool: show the per-agent command from README.md section 3 and wait for confirmation.
    - Both: run list, then upstream.
    Never vendor skill files into the repo.
-7. Verify every installed skill has SKILL.md, including nested skills such as humanizer-id/jurnal, and every agent symlink points into ~/.agents/skills.
+7. Verify every installed skill has SKILL.md, including nested skills such as humanizer-id/jurnal, and every symlink for an installed agent points into ~/.agents/skills.
 8. Write ~/.agents/skills/.sync-state:
    last_sync=<ISO 8601 timestamp with timezone>
    repo_commit=<full commit hash of the repo checkout>

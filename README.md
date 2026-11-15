@@ -110,7 +110,7 @@ Then in your agent, ask **"list your available skills"** or open `/skills` (Open
 
 ## 2. When an agent is not compatible
 
-Some agents do not read `~/.agents/skills/`. Do not change the universal setup; just add a symlink **per skill**.
+Some agents do not read `~/.agents/skills/`. Do not change the universal setup; just add a symlink **per skill**. Skip any row for an agent you do not use.
 
 | Agent | Folder it reads | Action |
 | --- | --- | --- |
