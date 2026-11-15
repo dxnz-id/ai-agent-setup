@@ -1,6 +1,6 @@
 # ai-agent-setup
 
-A reusable AI coding agent setup for new devices. `README.md` is the human guide: the list of plugins, skills, sources, and install commands. `PROMPTS.md` holds the standardized prompts agents use to install, sync, verify, and extend the setup. No vendored skill files, no installer script.
+A reusable AI coding agent setup for new devices. `README.md` is the human guide: the list of plugins, skills, sources, and install commands. `PROMPTS.md` holds the standardized prompts agents use to install, sync, and extend the setup. No vendored skill files, no installer script.
 
 Principles:
 
@@ -12,9 +12,9 @@ Prerequisites: `git`, `curl`, and an agent that supports `SKILL.md` skills. Open
 
 ## For agents
 
-Use `PROMPTS.md` for the standardized tasks: Install, Sync, Verify, and Add skill.
+Use `PROMPTS.md` for the standardized tasks: Install, Sync, and Add skill.
 
-Sync state lives outside this repo at `~/.agents/skills/.sync-state`. It records the last sync time, the repo commit, and the upstream commit or file hash of each skill and tool. The Sync prompt asks whether to report repo changes, upstream changes, or both.
+Sync state lives outside this repo at `~/.agents/skills/.sync-state`. It records the last sync time, the repo commit, and the upstream commit or file hash of each skill and tool. The Sync prompt reports the list and upstream status first, then asks whether to sync the list, upstream, or both.
 
 ---
 
@@ -234,7 +234,7 @@ curl -fsSL https://raw.githubusercontent.com/iOfficeAI/OfficeCLI/main/install.sh
 
 ## 5. Updates
 
-For a full sync with a change report, use the Sync prompt in `PROMPTS.md`. Manual updates:
+For a full sync, use the Sync prompt in `PROMPTS.md`. Manual updates:
 
 Skills installed by clone:
 
