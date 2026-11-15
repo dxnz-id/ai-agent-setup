@@ -1,6 +1,6 @@
 # ai-agent-setup
 
-A reusable AI coding agent setup for new devices. This repo is intentionally just a README: the list of plugins, skills, sources, and the commands to install them. No vendored skill files, no installer script.
+A reusable AI coding agent setup for new devices. `README.md` is the human guide: the list of plugins, skills, sources, and install commands. `PROMPTS.md` holds the standardized prompts agents use to install, sync, verify, and extend the setup. No vendored skill files, no installer script.
 
 Principles:
 
@@ -9,6 +9,12 @@ Principles:
 - **Universal setup first.** Add exceptions only when the agent on your device does not read `~/.agents/skills/`.
 
 Prerequisites: `git`, `curl`, and an agent that supports `SKILL.md` skills. OpenCode must be 2.0.4 or later for the Superpowers plugin.
+
+## For agents
+
+Use `PROMPTS.md` for the standardized tasks: Install, Sync, Verify, and Add skill.
+
+Sync state lives outside this repo at `~/.agents/skills/.sync-state`. It records the last sync time, the repo commit, and the upstream commit or file hash of each skill and tool. The Sync prompt asks whether to report repo changes, upstream changes, or both.
 
 ---
 
@@ -226,6 +232,8 @@ curl -fsSL https://raw.githubusercontent.com/iOfficeAI/OfficeCLI/main/install.sh
 
 ## 5. Updates
 
+For a full sync with a change report, use the Sync prompt in `PROMPTS.md`. Manual updates:
+
 Skills installed by clone:
 
 ```sh
@@ -271,5 +279,6 @@ If a skill does not appear: make sure the folder contains `SKILL.md` (not `skill
 - Installer script: every command is run manually from the README.
 - Version pins: repos always track the latest version.
 - Vendored skill files: each upstream repo remains the source of truth.
+- Sync state: `~/.agents/skills/.sync-state` is per machine, not committed.
 
 The trade-off: a new device needs a few copy-paste blocks, and this README can go stale if agent paths or commands change. If that becomes too tedious, add an `install.sh` to this repo.
