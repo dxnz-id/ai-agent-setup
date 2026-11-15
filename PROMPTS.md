@@ -56,7 +56,7 @@ Then:
    - Curl skill: download the file again.
    - Plugin or tool: show the per-agent command from README.md section 3 and wait for confirmation.
    Never vendor skill files into the repo.
-8. Verify every installed skill has SKILL.md and every agent symlink points into ~/.agents/skills.
+8. Verify every installed skill has SKILL.md, including nested skills such as humanizer-id/jurnal, and every agent symlink points into ~/.agents/skills.
 9. Write ~/.agents/skills/.sync-state:
    last_sync=<ISO 8601 timestamp with timezone>
    repo_commit=<full commit hash of the repo checkout>
@@ -75,7 +75,7 @@ Then:
 Verify the AI agent setup on this machine without changing anything.
 
 Read README.md sections 1, 2, and 6. Then check:
-- every skill listed in README.md exists in ~/.agents/skills and contains SKILL.md
+- every skill listed in README.md, including nested skills such as humanizer-id/jurnal, exists and contains SKILL.md
 - no extra skill folders exist in ~/.agents/skills
 - each Claude Code and Antigravity symlink points into ~/.agents/skills, one folder per skill
 - ~/.config/opencode/opencode.jsonc contains the ponytail and superpowers plugins
