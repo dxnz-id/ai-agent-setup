@@ -45,7 +45,7 @@ Then:
 3. Read README.md. It is the source of truth for the skill and tool list, sources, and install commands.
 4. Build the report:
    - Repo changes: git log --oneline <repo_commit>..HEAD -- README.md PROMPTS.md, then summarize added, removed, or changed skills and tools.
-   - Upstream changes: compare each state entry with its upstream source. For git entries, compare the recorded commit with git ls-remote <source> HEAD and list the commits in between. For npm entries, compare the recorded version with the latest published version. For file entries, download the source and compare sha256.
+   - Upstream changes: compare each state entry with its upstream source. For git entries, compare the recorded commit with git ls-remote <source> HEAD and list the commits that touch the skill or tool path, not every commit in the repo. For npm entries, compare the recorded version with the latest published version. For file entries, download the source and compare sha256.
    - Local drift: skills listed in README.md but missing from ~/.agents/skills, folders in ~/.agents/skills that README.md does not list, and symlinks that do not point into ~/.agents/skills.
 5. Show the report before changing anything. Group it as: new, removed, source changed, upstream updated, local drift.
 6. Ask before deleting a skill folder or symlink, overwriting a real folder that is not a symlink, or updating a plugin or tool.
