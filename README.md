@@ -52,43 +52,51 @@ If your agent is in this table, skip section 2.
 | tui-design | [hyperb1iss/hyperskills](https://github.com/hyperb1iss/hyperskills) | see block below |
 | design-taste-frontend (taste-skill) | [tasteskill.dev](https://www.tasteskill.dev/) | see block below |
 | motion-graphics | [awesomeclaude.ai](https://awesomeclaude.ai/claude-motion-graphics-skill.md) | see block below |
+| unslop | [heydamir/unslop](https://github.com/heydamir/unslop) | see block below |
 
 Skills that need extra steps:
 
 ```sh
+tmp="${TMPDIR:-/tmp}"
+
 # bahasa-skills: the repo holds 5 skills under skills/
-git clone --depth 1 https://github.com/alvinindra/bahasa-skills.git /tmp/bahasa-skills
-cp -r /tmp/bahasa-skills/skills/bahasa-* ~/.agents/skills/
+git clone --depth 1 https://github.com/alvinindra/bahasa-skills.git "$tmp/bahasa-skills"
+cp -r "$tmp"/bahasa-skills/skills/bahasa-* ~/.agents/skills/
 
 # material-3: the skill lives in skills/material-3
-git clone --depth 1 https://github.com/hamen/material-3-skill.git /tmp/material-3-skill
-cp -r /tmp/material-3-skill/skills/material-3 ~/.agents/skills/
+git clone --depth 1 https://github.com/hamen/material-3-skill.git "$tmp/material-3-skill"
+cp -r "$tmp/material-3-skill/skills/material-3" ~/.agents/skills/
 
 # create-verification-skill: pull one folder from a large repo
-git clone --depth 1 --filter=blob:none --sparse https://github.com/cursor/plugins.git /tmp/cursor-plugins
-git -C /tmp/cursor-plugins sparse-checkout set pstack/skills/create-verification-skill
+git clone --depth 1 --filter=blob:none --sparse https://github.com/cursor/plugins.git "$tmp/cursor-plugins"
+git -C "$tmp/cursor-plugins" sparse-checkout set pstack/skills/create-verification-skill
 mkdir -p ~/.agents/skills/create-verification-skill
-cp -r /tmp/cursor-plugins/pstack/skills/create-verification-skill/. ~/.agents/skills/create-verification-skill/
+cp -r "$tmp/cursor-plugins/pstack/skills/create-verification-skill/." ~/.agents/skills/create-verification-skill/
 
 # code-simplification
-git clone --depth 1 https://github.com/addyosmani/agent-skills.git /tmp/agent-skills
-cp -r /tmp/agent-skills/skills/code-simplification ~/.agents/skills/
+git clone --depth 1 https://github.com/addyosmani/agent-skills.git "$tmp/agent-skills"
+cp -r "$tmp/agent-skills/skills/code-simplification" ~/.agents/skills/
 
 # officecli: skill file only, the binary is installed separately (see section 4)
 mkdir -p ~/.agents/skills/officecli
 curl -fsSL https://officecli.ai/SKILL.md -o ~/.agents/skills/officecli/SKILL.md
 
 # find-skills
-git clone --depth 1 https://github.com/vercel-labs/skills.git /tmp/vercel-skills
-cp -r /tmp/vercel-skills/skills/find-skills ~/.agents/skills/
+git clone --depth 1 https://github.com/vercel-labs/skills.git "$tmp/vercel-skills"
+cp -r "$tmp/vercel-skills/skills/find-skills" ~/.agents/skills/
 
 # tui-design
-git clone --depth 1 https://github.com/hyperb1iss/hyperskills.git /tmp/hyperskills
-cp -r /tmp/hyperskills/skills/tui-design ~/.agents/skills/
+git clone --depth 1 https://github.com/hyperb1iss/hyperskills.git "$tmp/hyperskills"
+cp -r "$tmp/hyperskills/skills/tui-design" ~/.agents/skills/
 
 # design-taste-frontend (taste-skill)
-git clone --depth 1 https://github.com/Leonxlnx/taste-skill.git /tmp/taste-skill
-cp -r /tmp/taste-skill/skills/taste-skill ~/.agents/skills/design-taste-frontend
+git clone --depth 1 https://github.com/Leonxlnx/taste-skill.git "$tmp/taste-skill"
+cp -r "$tmp/taste-skill/skills/taste-skill" ~/.agents/skills/design-taste-frontend
+
+# unslop
+git clone --depth 1 https://github.com/heydamir/unslop.git "$tmp/unslop"
+mkdir -p ~/.agents/skills/unslop
+cp -r "$tmp/unslop/skills/unslop/." ~/.agents/skills/unslop/
 
 # motion-graphics
 mkdir -p ~/.agents/skills/motion-graphics
@@ -97,6 +105,8 @@ curl -fsSL https://awesomeclaude.ai/claude-motion-graphics-skill.md \
 ```
 
 `design-taste-frontend` runs its checker with Node 22 or newer and a real Chrome, Edge, or Chromium. On Termux the browser checks cannot run; building the page still works.
+
+`unslop` is CC BY 4.0, so keep its attribution. Live-site snapshots and story videos need Playwright, Chromium, and ffmpeg; the code audit works without them, and the browser parts do not run on Termux.
 
 Verify:
 
