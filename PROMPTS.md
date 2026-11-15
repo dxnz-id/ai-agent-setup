@@ -11,7 +11,7 @@ Standard prompts for agents that install, sync, verify, or extend this setup. Co
 ```text
 Install the AI agent setup from https://github.com/dxnz-id/ai-agent-setup on this machine.
 
-Read README.md and run sections 1 to 4 in order.
+Read README.md and run sections 1 to 4 in order. Use the state format from the Sync section of PROMPTS.md.
 
 Rules:
 - Install skills only in ~/.agents/skills/. Never copy skill files into a project.
@@ -89,7 +89,7 @@ Report every gap with the exact command that fixes it. Do not run the fixes.
 ```text
 Add a skill to https://github.com/dxnz-id/ai-agent-setup.
 
-Input: <name>, <source URL>, <install method>.
+Read README.md and PROMPTS.md first. Input: <name>, <source URL>, <install method>.
 
 Steps:
 1. Install it in ~/.agents/skills/<name> and verify SKILL.md exists.
