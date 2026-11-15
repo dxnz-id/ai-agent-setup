@@ -53,6 +53,8 @@ If your agent is in this table, skip section 2.
 | design-taste-frontend (taste-skill) | [tasteskill.dev](https://www.tasteskill.dev/) | see block below |
 | motion-graphics | [awesomeclaude.ai](https://awesomeclaude.ai/claude-motion-graphics-skill.md) | see block below |
 | unslop | [heydamir/unslop](https://github.com/heydamir/unslop) | see block below |
+| awwwards | [juliobsz/skills](https://github.com/juliobsz/skills) (`awwwards`) | see block below |
+| jury | [juliobsz/skills](https://github.com/juliobsz/skills) (`jury`) | see block below |
 
 Skills that need extra steps:
 
@@ -98,6 +100,12 @@ git clone --depth 1 https://github.com/heydamir/unslop.git "$tmp/unslop"
 mkdir -p ~/.agents/skills/unslop
 cp -r "$tmp/unslop/skills/unslop/." ~/.agents/skills/unslop/
 
+# awwwards and jury
+git clone --depth 1 https://github.com/juliobsz/skills.git "$tmp/juliobsz-skills"
+mkdir -p ~/.agents/skills/awwwards ~/.agents/skills/jury
+cp -r "$tmp/juliobsz-skills/awwwards/." ~/.agents/skills/awwwards/
+cp -r "$tmp/juliobsz-skills/jury/." ~/.agents/skills/jury/
+
 # motion-graphics
 mkdir -p ~/.agents/skills/motion-graphics
 curl -fsSL https://awesomeclaude.ai/claude-motion-graphics-skill.md \
@@ -107,6 +115,8 @@ curl -fsSL https://awesomeclaude.ai/claude-motion-graphics-skill.md \
 `design-taste-frontend` runs its checker with Node 22 or newer and a real Chrome, Edge, or Chromium. On Termux the browser checks cannot run; building the page still works.
 
 `unslop` is CC BY 4.0, so keep its attribution. Live-site snapshots and story videos need Playwright, Chromium, and ffmpeg; the code audit works without them, and the browser parts do not run on Termux.
+
+`awwwards` and `jury` need Node 20 or newer for their scripts, plus Playwright and Chromium for screenshots and QA. `jury` also uses axe-core. On Termux the browser checks do not run. Both are MIT.
 
 Verify:
 
