@@ -56,6 +56,16 @@ If your agent is in this table, skip section 2.
 | awwwards | [juliobsz/skills](https://github.com/juliobsz/skills) (`awwwards`) | see block below |
 | jury | [juliobsz/skills](https://github.com/juliobsz/skills) (`jury`) | see block below |
 
+### Skill packs
+
+These are installed as packs. The names in the Skills column are the exact folder names under `~/.agents/skills/`.
+
+| Pack | Skills | Source | Command |
+| --- | --- | --- | --- |
+| Taste classics | `high-end-visual-design`, `minimalist-ui`, `industrial-brutalist-ui` | [Leonxlnx/taste-skill-classics](https://github.com/Leonxlnx/taste-skill-classics) | see block below |
+| Emil motion | `emil-design-eng`, `animate`, `animation-performance`, `animation-vocabulary`, `apple-design`, `break-ui`, `choreograph`, `find-animation-opportunities`, `gestures`, `improve-animations`, `learn-taste`, `mobile-native`, `pick-ui-library`, `prototype`, `remove-animations`, `review-animations` | [emilkowalski/skills](https://github.com/emilkowalski/skills) | see block below |
+| Design references | `web-design-guidelines`, `ui-ux-pro-max` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills), [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | see block below |
+
 Skills that need extra steps:
 
 ```sh
@@ -112,7 +122,48 @@ curl -fsSL https://awesomeclaude.ai/claude-motion-graphics-skill.md \
   -o ~/.agents/skills/motion-graphics/SKILL.md
 ```
 
+Pack install:
+
+```sh
+tmp="${TMPDIR:-/tmp}"
+
+# taste classics: 3 of 7; the rest are opt-in legacy styles
+git clone --depth 1 https://github.com/Leonxlnx/taste-skill-classics.git "$tmp/taste-classics"
+mkdir -p ~/.agents/skills/high-end-visual-design \
+         ~/.agents/skills/minimalist-ui \
+         ~/.agents/skills/industrial-brutalist-ui
+cp -r "$tmp/taste-classics/skills/soft-skill/." ~/.agents/skills/high-end-visual-design/
+cp -r "$tmp/taste-classics/skills/minimalist-skill/." ~/.agents/skills/minimalist-ui/
+cp -r "$tmp/taste-classics/skills/brutalist-skill/." ~/.agents/skills/industrial-brutalist-ui/
+
+# emilkowalski/skills: 16 web skills; Expo, Swift and Sonner skills are intentionally left out
+git clone --depth 1 https://github.com/emilkowalski/skills.git "$tmp/emil-skills"
+for s in emil-design-eng animate animation-performance animation-vocabulary \
+         apple-design break-ui choreograph find-animation-opportunities \
+         gestures improve-animations learn-taste mobile-native \
+         pick-ui-library prototype remove-animations review-animations; do
+  mkdir -p ~/.agents/skills/"$s"
+  cp -r "$tmp/emil-skills/skills/$s/." ~/.agents/skills/"$s"/
+done
+
+# web-design-guidelines
+git clone --depth 1 https://github.com/vercel-labs/agent-skills.git "$tmp/agent-skills"
+mkdir -p ~/.agents/skills/web-design-guidelines
+cp -r "$tmp/agent-skills/skills/web-design-guidelines/." ~/.agents/skills/web-design-guidelines/
+
+# ui-ux-pro-max
+git clone --depth 1 https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git "$tmp/ui-ux-pro-max"
+mkdir -p ~/.agents/skills/ui-ux-pro-max
+cp -r "$tmp/ui-ux-pro-max/.claude/skills/ui-ux-pro-max/." ~/.agents/skills/ui-ux-pro-max/
+```
+
 `design-taste-frontend` runs its checker with Node 22 or newer and a real Chrome, Edge, or Chromium. On Termux the browser checks cannot run; building the page still works.
+
+`high-end-visual-design`, `minimalist-ui`, and `industrial-brutalist-ui` are opt-in style skills. Call them by name; they are not part of `design-taste-frontend`.
+
+The Emil pack is web-only. `animate-expo`, `ask-sonner`, and `write-swift` are intentionally not installed. Some scripts need Node 20 or newer.
+
+`web-design-guidelines` fetches the current Vercel guidelines at review time. `ui-ux-pro-max` uses local data and needs no network. Its examples use `$CLAUDE_PLUGIN_ROOT`; in this setup run `python3 ~/.agents/skills/ui-ux-pro-max/scripts/search.py ...` instead. Taste skills still need Node 22+ and Chrome/Chromium; on Termux the browser checks do not run.
 
 `unslop` is CC BY 4.0, so keep its attribution. Live-site snapshots and story videos need Playwright, Chromium, and ffmpeg; the code audit works without them, and the browser parts do not run on Termux.
 
